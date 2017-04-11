@@ -1,0 +1,48 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.1"
+
+    defaultConfig {
+        applicationId "com.udacity.gradle.builditbigger"
+        minSdkVersion 16
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    productFlavors {
+        free {
+            applicationId "com.udacity.gradle.builditbigger.free"
+        }
+        paid {
+            applicationId "com.udacity.gradle.builditbigger"
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    freeCompile 'com.google.android.gms:play-services-ads:10.0.1'
+    compile project(':jokesactivity')
+    compile project(path: ':jokes_backend', configuration: 'android-endpoints')
+    //testCompile 'com.google.code.findbugs:jsr305:3.0.0'
+    //testCompile 'junit:junit:4.12'
+    androidTestCompile('com.android.support.test:runner:0.4', {
+        //Solve conflict with dependency "versions for app (24.1.1) and test app (23.0.1) differ"
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:support-v4:25.3.1'
+}
+configurations.all {
+    resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
+}
